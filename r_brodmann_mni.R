@@ -6,9 +6,16 @@ main <- function() {
   args <- commandArgs(trailingOnly = TRUE)
   for (filename in args) {
     # convert xlsx first to csv, then the following
+    # R skips blank lines
     m <- read.csv(file = filename, header = FALSE,fileEncoding="UTF-8-BOM")
 
-    # file must be named "sid_MNIcoords.csv"
+    # file must be named "sid_*MNIcoords.csv" , where * can be something else
+    
+    # get rid of commas if present
+     clean <- function(ttt){
+       as.numeric( gsub('[,]', '', ttt))}
+ 
+      m[] <- sapply(m, clean)
     
     fileName = unlist(strsplit(filename,"/"))
     sid = unlist(strsplit(fileName[3],"_"))[1]
